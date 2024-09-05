@@ -18,6 +18,16 @@ def test_register_device():
 
 
 def test_send_command():
+    # Primeiro, garantir que o dispositivo esteja registrado
+    client.post(
+        "/v1/devices/",
+        json={
+            "device_id": "1234",
+            "device_type": "curtain",
+            "operations": ["open", "close"],
+        },
+    )
+
     response = client.post("/v1/devices/1234/command", json={"command": "open"})
     assert response.status_code == 200
     assert response.json() == {"message": "Command 'open' sent to device 1234"}

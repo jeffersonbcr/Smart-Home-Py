@@ -11,6 +11,20 @@ def test_create_environment():
 
 
 def test_add_device_to_environment():
+    # Primeiro, criar o ambiente
+    client.post("/v1/environments/", json={"name": "living_room"})
+
+    # Registrar o dispositivo
+    client.post(
+        "/v1/devices/",
+        json={
+            "device_id": "1234",
+            "device_type": "curtain",
+            "operations": ["open", "close"],
+        },
+    )
+
+    # Adicionar o dispositivo ao ambiente
     response = client.post(
         "/v1/environments/living_room/devices/", json={"device_id": "1234"}
     )
@@ -19,6 +33,23 @@ def test_add_device_to_environment():
 
 
 def test_send_command_to_environment():
+    # Primeiro, criar o ambiente
+    client.post("/v1/environments/", json={"name": "living_room"})
+
+    # Registrar o dispositivo
+    client.post(
+        "/v1/devices/",
+        json={
+            "device_id": "1234",
+            "device_type": "curtain",
+            "operations": ["open", "close"],
+        },
+    )
+
+    # Adicionar o dispositivo ao ambiente
+    client.post("/v1/environments/living_room/devices/", json={"device_id": "1234"})
+
+    # Enviar o comando para todos os dispositivos no ambiente
     response = client.post(
         "/v1/environments/living_room/command", json={"command": "open"}
     )
